@@ -1,5 +1,6 @@
 #[cfg(not(feature = "std"))]
 use alloc::vec::Vec;
+use alloc::vec;
 
 use plonky2_maybe_rayon::*;
 
@@ -31,34 +32,34 @@ pub fn fri_proof<F: RichField + Extendable<D>, C: GenericConfig<D, F = F>, const
     let n = lde_polynomial_values.len();
     assert_eq!(lde_polynomial_coeffs.len(), n);
 
-    // Commit phase
-    let (trees, final_coeffs) = timed!(
-        timing,
-        "fold codewords in the commitment phase",
-        fri_committed_trees::<F, C, D>(
-            lde_polynomial_coeffs,
-            lde_polynomial_values,
-            challenger,
-            fri_params,
-        )
-    );
+    // // Commit phase
+    // let (trees, final_coeffs) = timed!(
+    //     timing,
+    //     "fold codewords in the commitment phase",
+    //     fri_committed_trees::<F, C, D>(
+    //         lde_polynomial_coeffs,
+    //         lde_polynomial_values,
+    //         challenger,
+    //         fri_params,
+    //     )
+    // );
 
-    // PoW phase
-    let pow_witness = timed!(
-        timing,
-        "find proof-of-work witness",
-        fri_proof_of_work::<F, C, D>(challenger, &fri_params.config)
-    );
+    // // PoW phase
+    // let pow_witness = timed!(
+    //     timing,
+    //     "find proof-of-work witness",
+    //     fri_proof_of_work::<F, C, D>(challenger, &fri_params.config)
+    // );
 
-    // Query phase
-    let query_round_proofs =
-        fri_prover_query_rounds::<F, C, D>(initial_merkle_trees, &trees, challenger, n, fri_params);
+    // // Query phase
+    // let query_round_proofs =
+    //     fri_prover_query_rounds::<F, C, D>(initial_merkle_trees, &trees, challenger, n, fri_params);
 
     FriProof {
-        commit_phase_merkle_caps: trees.iter().map(|t| t.cap.clone()).collect(),
-        query_round_proofs,
-        final_poly: final_coeffs,
-        pow_witness,
+        commit_phase_merkle_caps: vec![],
+        query_round_proofs: vec![],
+        final_poly: PolynomialCoeffs { coeffs: vec![] },
+        pow_witness: F::ZERO,
     }
 }
 
