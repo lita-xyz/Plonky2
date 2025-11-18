@@ -5,7 +5,7 @@ use alloc::vec::Vec;
     feature = "std",
     not(all(feature = "gpu_merkle", target_arch = "wasm32"))
 ))]
-use futures::executor::block_on;
+use pollster::block_on;
 use plonky2_maybe_rayon::*;
 
 use crate::field::extension::{flatten, unflatten, Extendable};
