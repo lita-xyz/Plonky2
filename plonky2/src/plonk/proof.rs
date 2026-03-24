@@ -290,7 +290,7 @@ pub(crate) struct FriInferredElements<F: RichField + Extendable<D>, const D: usi
     pub Vec<F::Extension>,
 );
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 pub struct ProofWithPublicInputsTarget<const D: usize> {
     pub proof: ProofTarget<D>,
     pub public_inputs: Vec<Target>,
